@@ -1,0 +1,63 @@
+let List = || {
+    let self = @;
+
+    self.list = [];
+    self.len = 0;
+
+
+    self.push = |self, a| {
+        self.list = append(self.list, a);
+        self.len = self.len + 1;
+        return self;
+    };
+
+    self.pop = |self| {
+        let list_and_result = pop(self.list);
+
+        self.list = list_and_result[0];
+        let result = list_and_result[1];
+
+        self.len = self.len - 1;
+        return self, result;
+    };
+
+    self.print = |self| {
+        println(self.list);
+        return self;
+    };
+
+    return self;
+};
+
+
+let l = List();
+l.print();
+l.push("a");
+l.push("b");
+l.push("c");
+l.push("d");
+l.push("e");
+l.print();
+l.pop();
+l.print();
+
+
+
+let Test = |l| {
+    let self = @;
+
+    self.list = l;
+
+    self.list.push(5);
+
+    self.init = |self| {
+        self.list.print();
+        return self;
+    };
+
+    return self;
+};
+
+
+let t = Test(l);
+t.init();

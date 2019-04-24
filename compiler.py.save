@@ -1,0 +1,260 @@
+# from lark import Lark
+import sys
+from lark import Lark, Transformer
+
+grammar = r'''
+    start: (instruction)+
+
+    instruction: expr ";"
+    ?block: (instruction)+
+
+    ?expr: assignment
+        | class_def
+        | while
+        | conditional
+        | value
+        | "(" expr ")" -> wrapped_expr
+        | math
+
+    add: expr "+" expr
+    subtract: expr "-" expr
+    multiply: expr "*" expr
+    divide: expr "/" expr
+    mod: expr "%" expr
+
+    ?math: add
+        | subtract
+        | multiply
+        | divide
+        | mod
+
+    member_def: write -> member_def
+              | variable "=" expr -> member_def
+    class_def: "class" variable "{" (member_def)* "}"
+
+    ?read: (NAME ".")+ NAME -> read
+    ?write: (NAME ".")+ NAME "=" expr
+
+    ?assignment: write
+             | "let" variable "=" expr -> let_definition
+             | "let" "mut" variable "=" expr -> let_mut_definition
+             | variable "=" expr -> regular_assign
+
+    ?value: function
+        | call
+        | read
+        | variable
+        | literal
+
+    literal: NUMBER
+        | STRING
+        | vector
+        | "@" -> obj
+        | "true" -> true
+        | "false" -> false
+
+    vector: "[" (expr ",")* (expr)* "]"
+    
+    args: "|" (variable ",")* (variable)* "|"
+    retval: "return" expr ";"
+    function: args "{" (instruction)* "}" -> function_def_no_return
+            | args "{" (instruction)* retval "}" -> function_def_return
+
+    while: "while" expr "{" (instruction)* "}" -> while_loop
+    conditional: "?" expr expr ":" expr
+
+    parameters: (expr ",")* (expr)*
+    call: (NAME ".")+ NAME "(" parameters ")" -> method
+        | variable "(" parameters ")"
+        | expr "(" parameters ")"
+
+
+    ?variable: NAME
+            | NAME "&" -> foreign_variable
+
+
+    NUMBER: /0|[1-9]\d*/i
+    STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+    NAME: /[a-zA-Z_]\w*/
+    COMMENT: /\/\/[^\n]*/
+
+    %ignore /[\t \f\n]+/  // WS
+    %ignore /\\[\t \f\n]*\r?\n/   // LINE_CONT
+    %ignore COMMENT
+'''
+
+
+def rreplace(s, old, new):
+    li = s.rsplit(old, 1) #Split only once
+    return new.join(li)
+
+class CableLangCXXTree(Transformer):
+    def read(self, names):
+        result = "*" + str(names[0]) + ".get_member(\"" + str(names[1]) + "\")"
+        remaining = names[2:]
+
+        for name in remaining:
+            result += "->get_member(\"" + str(name) + "\")"
+        
+        return result
+
+    def parameters(self, parameters):
+        return "Value(L({" + ', '.join(parameters) + "}))"
+
+    def add(self, operands):
+        return operands[0] + "+" + operands[1]
+
+    def sub(self, operands):
+        return operands[0] + "-" + operands[1]
+
+    def multiply(self, operands):
+        return operands[0] + "*" + operands[1]
+
+    def divide(self, operands):
+        return operands[0] + "/" + operands[1]
+
+    def mod(self, operands):
+        return operands[0] + "%" + operands[1]
+
+    def obj(self, _):
+        return "Value()"
+
+    def call(self, names):
+        result = str(names[0]) + "(" + str(names[1]) + ")"
+        return result
+
+    def method(self, values):
+        names = values[:-1]
+        parameters = values[-1]
+
+        result = names[0]
+        remaining = names
+        if len(names) > 2:
+
+            result = str(names[0]) + ".get_member(\"" + str(names[1]) + "\")"
+            remaining = names[2:]
+
+            for name in remaining[:-1]:
+                result += "->get_member(\"" + str(name) + "\")"
+            
+            result += "->call_method(\"" + str(remaining[-1]) + "\", "
+            result += parameters + ")"
+        else:
+            result += ".call_method(\"" + str(remaining[-1]) + "\", "
+            result += parameters + ")"
+
+        return result
+
+    def literal(self, values):
+        return "Value({})".format(values[0])
+
+    def let_mut_definition(self, values):
+        return "auto " + str(values[0]) + " = " + str(values[1])
+
+    def let_definition(self, values):
+        return "auto const " + str(values[0]) + " = " + str(values[1])
+
+    def instruction(self, value):
+        return str(value[0]) + ";"
+
+    def retval(self, value):
+        return "return " + str(value[0]) + ";"
+
+    def write(self, values):
+        names = values[:-1]
+        new_value = values[-1]
+
+
+        result = "*" + str(names[0]) + ".get_member(\"" + str(names[1]) + "\")"
+        remaining = names[2:]
+
+        for name in remaining:
+            result += "->get_member(\"" + str(name) + "\")"
+        
+        result += " = " + new_value
+        return result
+
+    def regular_assign(self, values):
+        variable_name = values[0]
+        value = values[1]
+        return variable_name + " = " + value
+
+    def args(self, parameters):
+        result = "[] (Value ___CABLELANG__PARAMS___) {\n"
+
+        for i, p in enumerate(parameters):
+            result += "auto " + str(p) + " = ___CABLELANG__PARAMS___[Value(" + str(i) + ")]; "
+
+        return result
+
+    def function_def_no_return(self, values):
+        args = values[0]
+        body = values[1:]
+
+        return 'Value(Fn(' + args + '\t\n'.join(body) + 'return Value();\n' + '}))'
+
+    def function_def_return(self, values):
+        args = values[0]
+        body = values[1:]
+
+        return 'Value(Fn(' + args + '\t'.join(body) + '}))'
+
+
+l = Lark(grammar, start='block', parser='lalr', lexer='standard')
+# l = Lark(grammar)
+# s x: > println!
+# s s method: > ! s=
+
+# parse = lambda text: CableLangTree().transform(l.parse(text))
+# parse = lambda text: l.parse(text).pretty()
+parse = lambda text: '\n'.join(CableLangCXXTree().transform(l.parse(text)).pretty()[5:].splitlines())
+# parse = lambda text: CableLangCXXTree().transform(l.parse(text))
+
+print(
+    parse(
+        r"""
+        
+
+
+let Test = |a, b| {
+    let mut self = @;
+
+    self.a = a;
+    self.b = b;
+
+    return self;
+};
+
+|x| { return x * 2; } (1, 2, 3);
+
+
+|a, b| { } (5, 6);
+
+
+let mut t = Test("one", "two");
+t.p("whoa");
+
+        """
+    )
+)
+
+# try:
+#     parse = lambda text: '\n '.join(CableLangTree().transform(l.parse(text)).pretty()[5:].splitlines())
+
+#     if len(sys.argv) < 2:
+#         print("Missing input file")
+#     else:
+#         print(
+#             parse(open(sys.argv[1]).read())
+#         )
+
+# except:
+#     parse = lambda text: '\n '.join(CableLangTree().transform(l.parse(text)).splitlines())
+
+
+#     if len(sys.argv) < 2:
+#         print("Missing input file")
+#     else:
+#         print(
+#             parse(open(sys.argv[1]).read())
+#         )
