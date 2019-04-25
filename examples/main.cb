@@ -1,9 +1,14 @@
+include "std/io/io.cpp"
+include "std/list/list.cpp"
+let append = append_fn&;
+let pop = pop_fn&;
+let remove = remove_fn&;
+
 let List = || {
     let self = @;
 
     self.list = [];
     self.len = 0;
-
 
     self.push = |self, a| {
         self.list = append(self.list, a);
@@ -21,6 +26,11 @@ let List = || {
         return self, result;
     };
 
+    self.remove = |self, i| {
+        self.list = remove(self.list, i);
+        return self;
+    };
+
     self.print = |self| {
         println(self.list);
         return self;
@@ -30,34 +40,12 @@ let List = || {
 };
 
 
+
 let l = List();
+l.push(1);
+l.push(2);
+l.push(3);
+l.push(4);
+
+l.remove(2);
 l.print();
-l.push("a");
-l.push("b");
-l.push("c");
-l.push("d");
-l.push("e");
-l.print();
-l.pop();
-l.print();
-
-
-
-let Test = |l| {
-    let self = @;
-
-    self.list = l;
-
-    self.list.push(5);
-
-    self.init = |self| {
-        self.list.print();
-        return self;
-    };
-
-    return self;
-};
-
-
-let t = Test(l);
-t.init();

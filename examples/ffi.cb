@@ -1,0 +1,6 @@
+include "third_party/test.cpp"
+
+let test = test_fn&;
+
+
+test(@);
