@@ -1,51 +1,86 @@
-include "std/io/io.cpp"
-include "std/list/list.cpp"
-let append = append_fn&;
-let pop = pop_fn&;
-let remove = remove_fn&;
-
-let List = || {
-    let self = @;
-
-    self.list = [];
-    self.len = 0;
-
-    self.push = |self, a| {
-        self.list = append(self.list, a);
-        self.len = self.len + 1;
-        return self;
-    };
-
-    self.pop = |self| {
-        let list_and_result = pop(self.list);
-
-        self.list = list_and_result[0];
-        let result = list_and_result[1];
-
-        self.len = self.len - 1;
-        return self, result;
-    };
-
-    self.remove = |self, i| {
-        self.list = remove(self.list, i);
-        return self;
-    };
-
-    self.print = |self| {
-        println(self.list);
-        return self;
-    };
-
-    return self;
-};
+// include "std/io/io.cpp"
+// include "std/list/list.cpp"
+// let append = append_fn&;
+// let pop = pop_fn&;
+// let remove = remove_fn&;
+// let map = map_fn&;
+// let len = len_fn&;
+// let range__ = range_fn&;
 
 
 
-let l = List();
-l.push(1);
-l.push(2);
-l.push(3);
-l.push(4);
+// let List = || {
+//     let self = @;
 
-l.remove(2);
-l.print();
+//     self.list = [];
+//     self.len = 0;
+
+//     self._set_list = |self, l| {
+//         self.list = l;
+//         self.len = len(l);
+
+//         return self;
+//     };
+
+//     self.push = |self, a| {
+//         self.list = self.list + [a];
+//         self.len = self.len + 1;
+//         return self;
+//     };
+
+//     self.pop = |self| {
+//         let list_and_result = pop(self.list);
+
+//         self.list = list_and_result[0];
+//         let result = list_and_result[1];
+
+//         self.len = self.len - 1;
+//         return self, result;
+//     };
+
+//     self.remove = |self, i| {
+//         self.list = remove(self.list, i);
+//         return self;
+//     };
+
+//     self.map = |self, f| {
+//         let result = map(self.list, f);
+//         let ret_val = List();
+//         ret_val._set_list(result);
+
+//         return self, ret_val;
+//     };
+
+//     self.print = |self| {
+//         println(self.list);
+//         return self;
+//     };
+
+//     return self;
+// };
+
+
+
+// let range = |l, u| {
+//     let list = List();
+//     list._set_list(range__(l, u));
+//     return list;
+// };
+
+
+// let l = List();
+// let l = range(0, 2500);
+// let result = l.map(|x| { return x; })[0];
+// result.print();
+
+// let n = 0;
+// while n < 1000 {
+//     // l.push(n);
+//     println(n);
+//     n = n + 1;
+// }
+
+
+println(
+    1.0 + 1.0
+);

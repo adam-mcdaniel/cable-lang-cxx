@@ -3,7 +3,7 @@ from fileio import write_main, copy_std_to_dir
 from lark import Lark, Transformer
 from parser import CableLangCXXTree, includes
 from error import pretty_error_message, custom_error
-from constants import GRAMMAR_PATH
+from constants import GRAMMAR
 
 
 class Compiler:
@@ -55,7 +55,7 @@ def compile_text(text):
     try:
         script = CableLangCXXTree().transform(
                     Lark(
-                        open(GRAMMAR_PATH).read(),
+                        GRAMMAR,
                         start='block',
                         parser='lalr',
                         lexer='standard'

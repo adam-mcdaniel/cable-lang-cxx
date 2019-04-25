@@ -27,10 +27,10 @@ def compile(input_file, output_dir):
         mkdir(output_dir)
     except: pass
 
+    copy_std_to_dir(output_dir)
     c = Compiler(input_file, output_dir + '/main.cpp')
     c.compile()
     c.write()
-    copy_std_to_dir(output_dir)
     build(output_dir)
 
 

@@ -58,6 +58,18 @@ class CableLangCXXTree(Transformer):
     def parameters(self, parameters):
         return "Value(L({" + ', '.join(parameters) + "}))"
 
+    def greater(self, operands):
+        return operands[0] + " > " + operands[1]
+    def less(self, operands):
+        return operands[0] + " < " + operands[1]
+    def greatereq(self, operands):
+        return operands[0] + " >= " + operands[1]
+    def lesseq(self, operands):
+        return operands[0] + " <= " + operands[1]
+
+    def or_(self, operands):
+        return operands[0] + "||" + operands[1]
+
     def not_(self, operands):
         return "! " + operands[0]
 

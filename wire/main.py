@@ -1,6 +1,6 @@
 import click
-from subprocess import call
-from fileio import make_project
+from os import system
+from fileio import make_project, update_project
 from error import custom_info
 __author__ = "Adam McDaniel"
 
@@ -25,17 +25,26 @@ def new(project_name):
 def build():
     "Builds a cablelang project"
     custom_info("Building...")
-    call(["./cable", "compile", "src/main.cb"])
+    system("./cable compile src/main.cb")
     custom_info("Build complete.")
     
 
 @main.command()
 def run():
     "Builds a cablelang project"
-    info("Building...")
-    custom_info(["./cable", "compile", "src/main.cb"])
-    info("Build complete.")
-    custom_info(["./target/bin"])
+    custom_info("Building...")
+    system("./cable compile src/main.cb")
+    custom_info("Build complete.")
+    system("./target/bin")
+
+
+@main.command()
+@click.argument('path')
+def update(path):
+    "Updates a cablelang project's dependencies and binaries"
+    custom_info("Updating project's std library and cablelang deps...")
+    update_project(path)
+    custom_info("Updated project.")
 
     
 if __name__ == "__main__":
