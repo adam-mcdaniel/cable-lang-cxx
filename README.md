@@ -3,7 +3,11 @@
 cablelang is a very high level programming language that compiles to C++.
 
 
+To install for MacOS run this command.
 
+```bash
+curl -sSf https://raw.githubusercontent.com/adam-mcdaniel/cable-lang-cxx/master/install-mac.sh | sh
+```
 
 
 
