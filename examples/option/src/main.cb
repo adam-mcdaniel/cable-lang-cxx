@@ -1,29 +1,5 @@
-include "io/io.cpp"
-let prints = io_smart_print&;
-
-
-let Just = |d| {
-    let self = @;
-
-    self.data = d;
-    self.__bool__ = |self| {return self, true;};
-    self.__str__ = |self| {return self, self.data;};
-    self.unwrap = |self| {return self, self.data;};
-
-    return self;
-};
-
-
-let Nothing = || {
-    let self = @;
-
-    self.__bool__ = |self| {return self, false;};
-    self.__str__ = |self| {return self, "Nothing";};
-    self.unwrap = |self| {return self, @;};
-
-    return self;
-};
-
+import "io";
+import "option";
 
 let If = |a, b, c| {
     while a.__bool__() {
@@ -34,7 +10,7 @@ let If = |a, b, c| {
 
 
 let n = Just(5);
-// let n = Nothing();
+
 
 If(n,
     || {

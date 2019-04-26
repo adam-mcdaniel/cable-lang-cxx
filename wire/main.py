@@ -2,6 +2,9 @@ import click
 from os import system
 from fileio import make_project, update_project
 from error import custom_info
+
+
+__version__ = "0.1.1"
 __author__ = "Adam McDaniel"
 
 
@@ -11,6 +14,12 @@ def main():
     The package manager for the cablelang programming language
     """
     pass
+
+
+@main.command()
+def info():
+    "Displays info on wire package manager"
+    custom_info('Wire project manager v{}'.format(__version__))
 
 
 @main.command()

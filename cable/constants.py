@@ -29,15 +29,17 @@ SCRIPT_SUFFIX = "\n\nreturn 0;\n}"
 
 
 GRAMMAR = r'''
-//start: (instruction | include | import_)+
-//?block: (instruction | include | import_)+
-start: (instruction | include)+
-?block: (instruction | include)+
+start: (instruction)+
+?block: (instruction)+
+//start: (instruction | include)+
+//?block: (instruction | include)+
 
 include: "include" STRING
-//import_: "import" NAME
+import_: "import" STRING
 
-instruction: while
+instruction: include ";"
+            | import_ ";"
+            | while
             | expr ";"
             | retval
 

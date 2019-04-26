@@ -7,3 +7,6 @@ def pretty_error_message(e):
 def custom_error(e):
     print("==[ ERROR ]===>", e)
     exit(1)
+
+def custom_info(i):
+    print("==( INFO )===>", i)

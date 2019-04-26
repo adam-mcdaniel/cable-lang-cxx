@@ -1,29 +1,4 @@
-include "file/file.cpp"
-
-let read_file = read_file_fn&;
-let write_file = write_file_fn&;
-
-
-
-let File = |name| {
-    let self = @;
-
-    self.name = name;
-
-    self.read = |self| {
-        return self, read_file(self.name);
-    };
-
-    self.write = |self, content| {
-        return self, write_file(self.name, content);
-    };
-
-    self.append = |self, content| {
-        return self, write_file(self.name, read_file(self.name) + content);
-    };
-
-    return self;
-};
+import "file";
 
 
 println(

@@ -1,6 +1,7 @@
 #pragma once
 #include <any>
 #include <string>
+#include <memory>
 #include <sstream>
 #include <iostream>
 #include <functional>
@@ -35,7 +36,7 @@ string num_to_string(T t) {
 class Value {
 public:
     any value;
-    Map<string, Value*> members;
+    Map<string, shared_ptr<Value>> members;
     Type type;
 
     void push(Value v) {
@@ -116,10 +117,13 @@ public:
         this->type = Type::FunctionType;
     }
 
-    Value* get_member(string name) {
+    shared_ptr<Value> get_member(string name) {
         auto result = this->members.get(name);
         if (!result) {
-            this->members.set(name, new Value());
+            this->members.set(
+                name,
+                shared_ptr<Value>(new Value())
+            );
             result = this->members.get(name);
         }
         return result.unwrap();

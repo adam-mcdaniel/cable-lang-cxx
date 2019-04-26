@@ -1,5 +1,5 @@
 from lark import Lark, Transformer
-
+from constants import GRAMMAR
 
 def rreplace(s, old, new):
     li = s.rsplit(old, 1) #Split only once
@@ -26,8 +26,15 @@ class CableLangCXXTree(Transformer):
         return '\n'.join(values)
 
     def import_(self, values):
-        script = parse(open(values[0] + ".cb").read())
-        print(script)
+        script = CableLangCXXTree().transform(
+                    Lark(
+                        GRAMMAR,
+                        start='block',
+                        parser='lalr',
+                        lexer='standard'
+                    ).parse(open("src/" + values[0].replace("\"", "") + ".cb").read())
+                )
+
         return script
 
     def include(self, values):
@@ -154,7 +161,6 @@ class CableLangCXXTree(Transformer):
             return "return Value(L({" + ', '.join(values) + "}));"
         else:
             return "return Value();"
-
 
     def write(self, values):
         names = values[:-1]

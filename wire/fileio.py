@@ -34,6 +34,4 @@ def update_project(project_name):
     copy(PROJECT_DIR + "/include/std", path + "/include/std")
     copy(PROJECT_DIR + "/include/cable", path + "/include/cable")
     rm(path + "/cable")
-    rm(path + "/wire")
     copyfile(PROJECT_DIR + "/cable", path + "/cable")
-    copyfile(PROJECT_DIR + "/wire", path + "/wire")
