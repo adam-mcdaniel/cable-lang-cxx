@@ -19,7 +19,6 @@ const Fn println_fn = Fn([](Value printed_objects) {
 int main() {
     auto print = Value(print_fn);
     auto println = Value(println_fn);
-println(Value(L({Value("test")})));;
 Value n = Value(0);
 Value a = Value(0.0);
 Value b = Value(1.0);

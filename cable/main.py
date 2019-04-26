@@ -6,7 +6,7 @@ from compiler import Compiler
 from constants import OUTPUT_DIR
 from fileio import copy_std_to_dir, build
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Adam McDaniel"
 
 
