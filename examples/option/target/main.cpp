@@ -33,7 +33,7 @@ Value self = CABLELANG__PARAMS[Value(0)]; return Value(L({self, Value(0)}));}));
 Value self = CABLELANG__PARAMS[Value(0)]; return Value(L({self, Value("Nothing")}));}));	*self.get_member("unwrap") = Value(Fn([&] (Value CABLELANG__PARAMS) {
 Value self = CABLELANG__PARAMS[Value(0)]; return Value(L({self, Value()}));}));	return self;}));
 Value If = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value a = CABLELANG__PARAMS[Value(0)]; Value b = CABLELANG__PARAMS[Value(1)]; Value c = CABLELANG__PARAMS[Value(2)]; while ((a.call_method("__bool__", Value(L({})))[Value(0)]).to_bool()) {return b(Value(L({})));;};	return c(Value(L({})));}));
+Value a = CABLELANG__PARAMS[Value(0)]; Value b = CABLELANG__PARAMS[Value(1)]; Value c = CABLELANG__PARAMS[Value(2)]; while ((a.call_method("__bool__", Value(L({})))).to_bool()) {return b(Value(L({})));;};	return c(Value(L({})));}));
 Value n = Just(Value(L({Value(5)})));
 If(Value(L({n, Value(Fn([&] (Value CABLELANG__PARAMS) {
 println(Value(L({Value("N is something")})));	

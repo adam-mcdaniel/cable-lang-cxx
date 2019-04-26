@@ -136,6 +136,9 @@ public:
             }
             Value ret_val = result.unwrap();
             ret_val.remove(0);
+            if ((ret_val.len() == Value(1)).to_bool()) {
+                ret_val = ret_val[0];
+            }
             return ret_val;
         } else {
             *this = val;

@@ -84,6 +84,7 @@ member_def: write -> member_def
 class_def: "class" variable "{" (member_def)* "}"
 
 ?read: (NAME ".")+ NAME -> read
+     | expr "." (NAME ".")* NAME -> read
 ?write: (NAME ".")+ NAME "=" expr
 
 
@@ -120,6 +121,7 @@ conditional: "?" expr expr ":" expr
 
 parameters: (expr ",")* (expr)*
 call: (NAME ".")+ NAME "(" parameters ")" -> method
+    | expr "." (NAME ".")* NAME "(" parameters ")" -> method
     | variable "(" parameters ")"
     | expr "(" parameters ")"
 
