@@ -1,6 +1,25 @@
 # cable-lang-cxx
 
-Cable-lang is a programming language that compiles to C++. It runs very fast, but it's extremely high level. It's also dynamically typed. Here's an example script in Cable-lang.
+cablelang is a very high level programming language that compiles to C++.
+
+
+
+
+
+
+## Features
+- Speed
+    Cablelang is extraordinarily fast for such a high level language.
+    Although there is overhead from all the abstraction and high level operations that cablelang, the drop in performance is barely noticable. It out performs languages like Python very easily.
+
+- Dynamic Typing
+    Cablelang, although it is a compiled language, supports dynamic typing. This means that it's much easier to manipulate variables and that your programs are more expressive.
+    
+- Multi-paradigm
+    Iterative / procedural, functional, and object oriented programming are all supported by cablelang.
+
+- Foreign Function Interface
+    Because cablelang compiles directly to C++, you can easily integrate C++ code into your cablelang program. Here's an example foreign function.
 
 
 ## Examples
@@ -75,7 +94,7 @@ let write_file = write_file_fn&;
 
 
 
-// Define a constructor
+// Define a constructor for a File object
 // This is really just a constructor instead of a class,
 // It returns an objects with the defined attributes,
 // its not really of type File.
