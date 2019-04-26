@@ -80,19 +80,23 @@ let write_file = write_file_fn&;
 // It returns an objects with the defined attributes,
 // its not really of type File.
 let File = |name| {
+    // Must define the object to return by yourself!
     let self = @;
 
     self.name = name;
 
     self.read = |self| {
+        // Return the value of self, or the object will become None
         return self, read_file(self.name);
     };
 
     self.write = |self, content| {
+        // Return the value of self, or the object will become None
         return self, write_file(self.name, content);
     };
 
     self.append = |self, content| {
+        // Return the value of self, or the object will become None
         return self, write_file(self.name, read_file(self.name) + content);
     };
 
