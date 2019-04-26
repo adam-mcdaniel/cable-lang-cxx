@@ -9,6 +9,9 @@ def rreplace(s, old, new):
 includes = []
 
 
+# def_prefix = "auto"
+def_prefix = "Value"
+
 class CableLangCXXTree(Transformer):
     def read(self, names):
         result = "*" + str(names[0]) + ".get_member(\"" + str(names[1]) + "\")"
@@ -136,10 +139,10 @@ class CableLangCXXTree(Transformer):
         return "Value({})".format(values[0])
 
     def let_mut_definition(self, values):
-        return "Value " + str(values[0]) + " = " + str(values[1])
+        return def_prefix + " " + str(values[0]) + " = " + str(values[1])
 
     def let_definition(self, values):
-        return "Value " + str(values[0]) + " = " + str(values[1])
+        return def_prefix + " " + str(values[0]) + " = " + str(values[1])
 
     def instruction(self, value):
         return str(value[0]) + ";"
@@ -173,8 +176,13 @@ class CableLangCXXTree(Transformer):
         return variable_name + " = " + value
 
     def args(self, parameters):
-        PARAMS_NAME = "CABLELANG__PARAMS"
-        result = "[&] (Value " + PARAMS_NAME + ") {\n"
+        PARAMS_NAME = "__CABLELANG__PARAMS__"
+        # This causes problems with closures.
+        # Do not pass by reference.
+        # result = "[&] (Value " + PARAMS_NAME + ") {\n"
+        
+        # This passes by value. Slower but allows more flexible programming
+        result = "[=] (Value " + PARAMS_NAME + ") mutable {\n"
 
         for i, p in enumerate(parameters):
             result += "Value " + str(p) + " = " + PARAMS_NAME + "[Value(" + str(i) + ")]; "

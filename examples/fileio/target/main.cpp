@@ -23,11 +23,11 @@ int main() {
 
 Value read_file = Value(read_file_fn);
 Value write_file = Value(write_file_fn);
-Value File = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value name = CABLELANG__PARAMS[Value(0)]; Value self = Value();	*self.get_member("name") = name;	*self.get_member("read") = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value self = CABLELANG__PARAMS[Value(0)]; return Value(L({self, read_file(Value(L({*self.get_member("name")})))}));}));	*self.get_member("write") = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value self = CABLELANG__PARAMS[Value(0)]; Value content = CABLELANG__PARAMS[Value(1)]; return Value(L({self, write_file(Value(L({*self.get_member("name"), content})))}));}));	*self.get_member("append") = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value self = CABLELANG__PARAMS[Value(0)]; Value content = CABLELANG__PARAMS[Value(1)]; return Value(L({self, write_file(Value(L({*self.get_member("name"), read_file(Value(L({*self.get_member("name")})))+content})))}));}));	return self;}));
+Value File = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
+Value name = __CABLELANG__PARAMS__[Value(0)]; Value self = Value();	*self.get_member("name") = name;	*self.get_member("read") = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
+Value self = __CABLELANG__PARAMS__[Value(0)]; return Value(L({self, read_file(Value(L({*self.get_member("name")})))}));}));	*self.get_member("write") = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
+Value self = __CABLELANG__PARAMS__[Value(0)]; Value content = __CABLELANG__PARAMS__[Value(1)]; return Value(L({self, write_file(Value(L({*self.get_member("name"), content})))}));}));	*self.get_member("append") = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
+Value self = __CABLELANG__PARAMS__[Value(0)]; Value content = __CABLELANG__PARAMS__[Value(1)]; return Value(L({self, write_file(Value(L({*self.get_member("name"), read_file(Value(L({*self.get_member("name")})))+content})))}));}));	return self;}));
 println(Value(L({File(Value(L({Value("test.txt")}))).call_method("read", Value(L({})))})));
 Value f = File(Value(L({Value("whoa.txt")})));
 Value n = Value(0);

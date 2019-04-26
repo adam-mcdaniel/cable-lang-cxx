@@ -1,0 +1,33 @@
+// church encodings
+
+let True = |a| {
+    return |b| {
+        return a;
+    }; 
+};
+
+let False = |a| {
+    return |b| {
+        return b;
+    }; 
+};
+
+let If = |a| {
+    return |b| {
+        return |c| {
+            return a(b)(c);
+        }; 
+    }; 
+};
+
+
+If(False)(
+        |n| {
+            println("true! also ", n);
+        }
+    )
+    (
+        |n| {
+            println("false! also ", n);
+        }
+    )(5);
