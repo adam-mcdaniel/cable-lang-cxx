@@ -21,6 +21,10 @@ public:
         this->length = t.size();
     }
 
+    vector<T> as_vector() {
+        return this->t;
+    }
+
     void push(T t) {
         this->t.push_back(t);
         this->length++;

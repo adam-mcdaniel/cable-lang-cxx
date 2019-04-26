@@ -58,10 +58,15 @@ not_: "not" expr
 and_: expr "and" expr
 or_: expr "or" expr
 add: expr "+" expr
+addeq: variable "+=" expr
 subtract: expr "-" expr
+subtracteq: variable "-=" expr
 multiply: expr "*" expr
+multiplyeq: variable "*=" expr
 divide: expr "/" expr
+divideeq: variable "/=" expr
 mod: expr "%" expr
+modeq: variable "%=" expr
 greater: expr ">" expr
 less: expr "<" expr
 greatereq: expr ">=" expr
@@ -95,6 +100,11 @@ class_def: "class" variable "{" (member_def)* "}"
             | "let" variable "=" expr -> let_definition
             | "let" "mut" variable "=" expr -> let_mut_definition
             | variable "=" expr -> regular_assign
+            | addeq
+            | subtracteq
+            | multiplyeq
+            | divideeq
+            | modeq
 
 index: expr "[" expr "]"
 ?value: function

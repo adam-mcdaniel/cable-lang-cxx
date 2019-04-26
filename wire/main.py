@@ -4,8 +4,11 @@ from fileio import make_project, update_project
 from error import custom_info
 
 
-__version__ = "0.1.1"
+__version__ = "0.1.4"
 __author__ = "Adam McDaniel"
+__improvements__ = [
+    "Added support for updating multiple projects at once"
+]
 
 
 @click.group()
@@ -20,6 +23,8 @@ def main():
 def info():
     "Displays info on wire package manager"
     custom_info('Wire project manager v{}'.format(__version__))
+    for improvement in __improvements__:
+        custom_info(improvement)
 
 
 @main.command()
@@ -48,12 +53,13 @@ def run():
 
 
 @main.command()
-@click.argument('path')
-def update(path):
-    "Updates a cablelang project's dependencies and binaries"
-    custom_info("Updating project's std library and cablelang deps...")
-    update_project(path)
-    custom_info("Updated project.")
+@click.argument('paths', nargs=-1)
+def update(paths):
+    "Updates one or more cablelang projects' dependencies and binaries"
+    for path in paths:
+        custom_info("Updating project's std library and cablelang deps...")
+        update_project(path)
+        custom_info("Updated project.")
 
     
 if __name__ == "__main__":

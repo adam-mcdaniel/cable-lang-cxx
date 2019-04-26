@@ -107,6 +107,21 @@ class CableLangCXXTree(Transformer):
     def mod(self, operands):
         return operands[0] + "%" + operands[1]
 
+    def addeq(self, operands):
+        return operands[0] + "+=" + operands[1]
+
+    def subtracteq(self, operands):
+        return operands[0] + "-=" + operands[1]
+
+    def multiplyeq(self, operands):
+        return operands[0] + "*=" + operands[1]
+
+    def divideeq(self, operands):
+        return operands[0] + "/=" + operands[1]
+
+    def modeq(self, operands):
+        return operands[0] + "%=" + operands[1]
+
     def obj(self, _):
         return "Value()"
 

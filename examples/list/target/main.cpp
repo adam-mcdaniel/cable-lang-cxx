@@ -20,8 +20,8 @@ int main() {
     auto print = Value(print_fn);
     auto println = Value(println_fn);
 Value range = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
-Value l = __CABLELANG__PARAMS__[Value(0)]; Value u = __CABLELANG__PARAMS__[Value(1)]; Value result = Value(Value(L({})));	Value n = l;	while ((n < u).to_bool()) {n = n+Value(1);
-result = result+Value(Value(L({n})));};	return result;}));
+Value l = __CABLELANG__PARAMS__[Value(0)]; Value u = __CABLELANG__PARAMS__[Value(1)]; Value result = Value(Value(L({})));	Value n = l;	while ((n < u).to_bool()) {n+=Value(1);
+result+=Value(Value(L({n})));};	return result;}));
 for (Value x : range(Value(L({Value(0), Value(1000)}))).get_list().unwrap().as_vector()) {println(Value(L({x})));};
 
 return 0;

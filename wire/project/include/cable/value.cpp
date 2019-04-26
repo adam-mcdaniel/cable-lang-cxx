@@ -318,6 +318,81 @@ public:
         return result;
     }
 
+
+    void operator +=(Value v) {
+        switch (this->type) {
+            case Type::ListType:
+                this->value.emplace<List<Value>>(
+                    this->get_list().unwrap() + v.get_list().unwrap()
+                );
+                break;
+            case Type::String:
+                this->value.emplace<string>(
+                    this->get_string().unwrap() + v.get_string().unwrap()
+                );
+                break;
+            case Type::I32:
+                this->value.emplace<i32>(
+                    this->get_i32().unwrap() + v.get_i32().unwrap()
+                );
+                break;
+            case Type::F64:
+                this->value.emplace<f64>(
+                    this->get_f64().unwrap() + v.get_f64().unwrap()
+                );
+                break;
+            default: break;
+        }
+    }
+
+    void operator -=(Value v) {
+        switch (this->type) {
+            case Type::I32:
+                this->value.emplace<i32>(
+                    this->get_i32().unwrap() - v.get_i32().unwrap()
+                );
+                break;
+            case Type::F64:
+                this->value.emplace<f64>(
+                    this->get_f64().unwrap() - v.get_f64().unwrap()
+                );
+                break;
+            default: break;
+        }
+    }
+
+    void operator *=(Value v) {
+        switch (this->type) {
+            case Type::I32:
+                this->value.emplace<i32>(
+                    this->get_i32().unwrap() * v.get_i32().unwrap()
+                );
+                break;
+            case Type::F64:
+                this->value.emplace<f64>(
+                    this->get_f64().unwrap() * v.get_f64().unwrap()
+                );
+                break;
+            default: break;
+        }
+    }
+
+    void operator /=(Value v) {
+        switch (this->type) {
+            case Type::I32:
+                this->value.emplace<i32>(
+                    this->get_i32().unwrap() / v.get_i32().unwrap()
+                );
+                break;
+            case Type::F64:
+                this->value.emplace<f64>(
+                    this->get_f64().unwrap() / v.get_f64().unwrap()
+                );
+                break;
+            default: break;
+        }
+    }
+
     Value format() {
         string result = "";
         switch (this->type) {

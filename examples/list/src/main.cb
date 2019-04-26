@@ -3,10 +3,9 @@ let range = |l, u| {
     let result = [];
     let n = l;
     while n < u {
-        n = n + 1;
-        result = result + [n];
+        n += 1;
+        result += [n];
     }
-
     return result;
 };
 

@@ -6,8 +6,12 @@ from compiler import Compiler
 from constants import OUTPUT_DIR
 from fileio import copy_std_to_dir, build
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __author__ = "Adam McDaniel"
+__improvements__ = [
+    "Added for loops",
+    "Added +=, -=, *=, /= operators"
+]
 
 
 @click.group()
@@ -22,6 +26,8 @@ def main():
 def info():
     "Displays info on cable compiler"
     custom_info('Cable compiler v{}'.format(__version__))
+    for improvement in __improvements__:
+        custom_info(improvement)
 
 
 @main.command()
