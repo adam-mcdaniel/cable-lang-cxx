@@ -40,6 +40,7 @@ import_: "import" STRING
 instruction: include ";"
             | import_ ";"
             | while
+            | for
             | expr ";"
             | retval
 
@@ -119,6 +120,7 @@ function: args "{" (instruction)* "}" -> function_def_no_return
         | args "{" (instruction)* retval "}" -> function_def_return
 
 while: "while" expr "{" (instruction)* "}" -> while_loop
+for: "for" NAME "in" expr "{" (instruction)* "}" -> for_loop
 conditional: "?" expr expr ":" expr
 
 parameters: (expr ",")* (expr)*

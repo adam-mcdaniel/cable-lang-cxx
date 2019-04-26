@@ -139,8 +139,13 @@ class CableLangCXXTree(Transformer):
     def while_loop(self, values):
         condition = values[0]
         body = values[1:]
-
         return "while ((" + str(condition) + ").to_bool()) {" + '\n'.join(body) + "}" 
+
+    def for_loop(self, values):
+        name = values[0]
+        vector = values[1]
+        body = values[2:]
+        return "for (Value " + name + " : " + vector + ".get_list().unwrap().as_vector()) {" + '\n'.join(body) + "}" 
 
     def literal(self, values):
         return "Value({})".format(values[0])

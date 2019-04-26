@@ -6,7 +6,7 @@ from compiler import Compiler
 from constants import OUTPUT_DIR
 from fileio import copy_std_to_dir, build
 
-__version__ = "0.1.1"
+__version__ = "0.2.1"
 __author__ = "Adam McDaniel"
 
 
@@ -20,7 +20,7 @@ def main():
 
 @main.command()
 def info():
-    "Displays info on wire package manager"
+    "Displays info on cable compiler"
     custom_info('Cable compiler v{}'.format(__version__))
 
 
