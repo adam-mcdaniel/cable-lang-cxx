@@ -41,6 +41,15 @@ def build():
     custom_info("Building...")
     system("./cable compile src/main.cb")
     custom_info("Build complete.")
+    
+
+@main.command()
+def run():
+    "Builds a cablelang project"
+    custom_info("Building...")
+    system("./cable compile src/main.cb")
+    custom_info("Build complete.")
+    system("./target/bin")
 
 
 @main.command()
