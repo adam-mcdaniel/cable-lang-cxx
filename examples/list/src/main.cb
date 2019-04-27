@@ -13,3 +13,7 @@ let range = |l, u| {
 for x in range(0, 1000) {
     println(x);
 }
+
+
+
+|| { println("test"); } ();
