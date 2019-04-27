@@ -1,3 +1,8 @@
+all:
+	make build
+	cp -R bin/* release/unix
+	make unix
+
 build:
 	rm -Rf bin
 	mkdir bin

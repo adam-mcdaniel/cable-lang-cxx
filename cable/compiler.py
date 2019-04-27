@@ -1,4 +1,4 @@
-from os.path import exists, relpath
+from os.path import exists, relpath, dirname
 from fileio import write_main, copy_std_to_dir
 from lark import Lark, Transformer
 from parser import CableLangCXXTree, includes
@@ -16,7 +16,8 @@ class Compiler:
     def compile(self):
         if exists(self.input_path):
             self.output = compile_text(
-                open(self.input_path).read()
+                open(self.input_path).read(),
+                dirname(self.input_path)
                 )
         else:
             custom_error(
@@ -51,9 +52,9 @@ class CompiledScript:
         pretty_error_message(self.error)
 
 
-def compile_text(text):
+def compile_text(text, directory):
     try:
-        script = CableLangCXXTree().transform(
+        script = CableLangCXXTree(directory).transform(
                     Lark(
                         GRAMMAR,
                         start='block',

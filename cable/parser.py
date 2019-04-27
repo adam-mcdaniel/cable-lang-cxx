@@ -13,6 +13,9 @@ includes = []
 def_prefix = "Value"
 
 class CableLangCXXTree(Transformer):
+    def __init__(self, path):
+        self.path = path
+
     def read(self, names):
         result = "*" + str(names[0]) + ".get_member(\"" + str(names[1]) + "\")"
         remaining = names[2:]
@@ -26,13 +29,13 @@ class CableLangCXXTree(Transformer):
         return '\n'.join(values)
 
     def import_(self, values):
-        script = CableLangCXXTree().transform(
+        script = CableLangCXXTree(self.path).transform(
                     Lark(
                         GRAMMAR,
                         start='block',
                         parser='lalr',
                         lexer='standard'
-                    ).parse(open("src/" + values[0].replace("\"", "") + ".cb").read())
+                    ).parse(open(self.path + "/" + values[0].replace("\"", "") + ".cb").read())
                 )
 
         return script
