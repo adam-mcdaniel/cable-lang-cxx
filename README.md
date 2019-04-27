@@ -9,6 +9,10 @@ To install for *nix run this command.
 curl -sSf https://raw.githubusercontent.com/adam-mcdaniel/cable-lang-cxx/master/install-unix.sh | sh
 ```
 
+## Purpose
+
+This language is intended to be a target for other languages.
+
 
 
 ## Features
