@@ -154,6 +154,11 @@ class CableLangCXXTree(Transformer):
 
         return result
 
+    def if_statement(self, values):
+        condition = values[0]
+        body = values[1:]
+        return "if ((" + str(condition) + ").to_bool()) {" + '\n'.join(body) + "}" 
+
     def while_loop(self, values):
         condition = values[0]
         body = values[1:]

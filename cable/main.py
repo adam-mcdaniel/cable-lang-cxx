@@ -6,12 +6,13 @@ from compiler import Compiler
 from constants import OUTPUT_DIR
 from fileio import copy_std_to_dir, build
 
-__version__ = "0.2.3"
+__version__ = "0.3.0"
 __author__ = "Adam McDaniel"
 __improvements__ = [
     "v0.2.2 - Added for loops",
-    "v0.2.2 - Added +=, -=, *=, /= operators"
-    "v0.2.3 - Added support for compiling in arbitrary locations"
+    "v0.2.2 - Added +=, -=, *=, /= operators",
+    "v0.2.3 - Added support for compiling in arbitrary locations",
+    "v0.3.0 - Added support for if statements",
 ]
 
 
