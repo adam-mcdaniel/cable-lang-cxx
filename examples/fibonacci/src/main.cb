@@ -4,6 +4,7 @@ let a = 0.0;
 let b = 1.0;
 let c = 0.0;
 
+
 while n < 1000 {
     c = a + b;
     a = b;

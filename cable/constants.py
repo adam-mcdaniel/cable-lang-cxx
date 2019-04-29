@@ -59,15 +59,15 @@ not_: "not" expr
 and_: expr "and" expr
 or_: expr "or" expr
 add: expr "+" expr
-addeq: variable "+=" expr
+addeq: (read | variable) "+=" expr
 subtract: expr "-" expr
-subtracteq: variable "-=" expr
+subtracteq: (read | variable) "-=" expr
 multiply: expr "*" expr
-multiplyeq: variable "*=" expr
+multiplyeq: (read | variable) "*=" expr
 divide: expr "/" expr
-divideeq: variable "/=" expr
+divideeq: (read | variable) "/=" expr
 mod: expr "%" expr
-modeq: variable "%=" expr
+modeq: (read | variable) "%=" expr
 greater: expr ">" expr
 less: expr "<" expr
 greatereq: expr ">=" expr
@@ -97,15 +97,15 @@ class_def: "class" variable "{" (member_def)* "}"
 ?write: (NAME ".")+ NAME "=" expr
 
 
-?assignment: write
-            | "let" variable "=" expr -> let_definition
-            | "let" "mut" variable "=" expr -> let_mut_definition
-            | variable "=" expr -> regular_assign
-            | addeq
-            | subtracteq
-            | multiplyeq
-            | divideeq
-            | modeq
+?assignment: addeq
+        | subtracteq
+        | multiplyeq
+        | divideeq
+        | modeq
+        | write
+        | "let" variable "=" expr -> let_definition
+        | "let" "mut" variable "=" expr -> let_mut_definition
+        | variable "=" expr -> regular_assign
 
 index: expr "[" expr "]"
 ?value: function

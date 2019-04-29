@@ -1,5 +1,6 @@
 #pragma once
 #include <any>
+#include <math.h>
 #include <string>
 #include <memory>
 #include <sstream>
@@ -318,6 +319,21 @@ public:
         return result;
     }
 
+    Value operator %(Value v) {
+        Value result;
+        switch (this->type) {
+            case Type::I32:
+                result = Value(this->get_i32().unwrap() % v.get_i32().unwrap()); break;
+
+            case Type::F64:
+                result = Value(fmod(this->get_f64().unwrap(), v.get_f64().unwrap())); break;
+
+            default:
+                result = Value();
+        }
+        return result;
+    }
+
 
     void operator +=(Value v) {
         switch (this->type) {
@@ -387,6 +403,22 @@ public:
             case Type::F64:
                 this->value.emplace<f64>(
                     this->get_f64().unwrap() / v.get_f64().unwrap()
+                );
+                break;
+            default: break;
+        }
+    }
+
+    void operator %=(Value v) {
+        switch (this->type) {
+            case Type::I32:
+                this->value.emplace<i32>(
+                    this->get_i32().unwrap() % v.get_i32().unwrap()
+                );
+                break;
+            case Type::F64:
+                this->value.emplace<f64>(
+                    fmod(this->get_f64().unwrap(), v.get_f64().unwrap())
                 );
                 break;
             default: break;
