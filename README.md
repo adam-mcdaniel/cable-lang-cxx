@@ -9,6 +9,15 @@ To install for *nix run this command.
 curl -sSf https://raw.githubusercontent.com/adam-mcdaniel/cable-lang-cxx/master/install-unix.sh | sh
 ```
 
+## Requirements
+
+- A working version of G++ that supports the C++17 standard.
+- Python3
+    - pyinstaller
+    - lark-parser
+    - click
+
+
 ## Purpose
 
 This language is intended to be a target for other languages.
