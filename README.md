@@ -12,17 +12,15 @@ curl -sSf https://raw.githubusercontent.com/adam-mcdaniel/cable-lang-cxx/master/
 ## Requirements
 
 - A working version of G++ that supports the C++17 standard.
+- Make
 - Python3
     - pyinstaller
     - lark-parser
     - click
 
-
 ## Purpose
 
 This language is intended to be a target for other languages.
-
-
 
 ## Features
 - Speed
