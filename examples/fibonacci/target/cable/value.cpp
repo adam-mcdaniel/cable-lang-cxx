@@ -41,20 +41,37 @@ public:
     Type type;
 
     void push(Value v) {
-        auto list_option = this->get_list();
-        if (list_option) {
-            auto list = list_option.unwrap();
-            list.push(v);
-            this->set_value(list);
+        // auto list_option = this->get_list();
+        // if (list_option) {
+        //     cout << "getting list" << endl;
+        //     auto list = list_option.unwrap();
+        //     list.push(v);
+        //     this->set_value(list);
+        //     cout << "done list" << endl;
+        // }
+        if (this->type != Type::ListType) {
+            return;
         }
+        auto& list_ref = this->get_list_ref();
+        list_ref.push(v);
     }
 
     Value pop() {
-        auto list_option = this->get_list();
-        if (list_option) {
-            auto list = list_option.unwrap();
-            auto result = list.pop();
-            this->set_value(list);
+        // auto list_option = this->get_list();
+        // if (list_option) {
+        //     auto list = list_option.unwrap();
+        //     auto result = list.pop();
+        //     this->set_value(list);
+        //     return result.unwrap();
+        // }
+        // return Value();
+        if (this->type != Type::ListType) {
+            return Value();
+        }
+        auto& list_ref = this->get_list_ref();
+
+        Option<Value> result = list_ref.pop();
+        if (result) {
             return result.unwrap();
         }
         return Value();
@@ -79,9 +96,34 @@ public:
         return Value(0);
     }
     
-    template<typename T>
-    void set_value(T t) {
-        *this = Value(t);
+    void set_value(i32 value) {
+        this->value = value;
+        this->type = Type::I32;
+    }
+
+    void set_value(f64 value) {
+        this->value = value;
+        this->type = Type::F64;
+    }
+
+    void set_value(string value) {
+        this->value = value;
+        this->type = Type::String;
+    }
+
+    void set_value(vector<Value> value) {
+        this->value = List(value);
+        this->type = Type::ListType;
+    }
+
+    void set_value(List<Value> value) {
+        this->value.emplace<List<Value>>(value);
+        this->type = Type::ListType;
+    }
+
+    void set_value(Function<Value, Value> f) {
+        this->value = f;
+        this->type = Type::FunctionType;
     }
 
     Value() {
@@ -338,9 +380,9 @@ public:
     void operator +=(Value v) {
         switch (this->type) {
             case Type::ListType:
-                this->value.emplace<List<Value>>(
-                    this->get_list().unwrap() + v.get_list().unwrap()
-                );
+                for (auto x: v.get_list().unwrap().as_vector()) {
+                    this->push(x);
+                }
                 break;
             case Type::String:
                 this->value.emplace<string>(
@@ -403,6 +445,22 @@ public:
             case Type::F64:
                 this->value.emplace<f64>(
                     this->get_f64().unwrap() / v.get_f64().unwrap()
+                );
+                break;
+            default: break;
+        }
+    }
+
+    void operator %=(Value v) {
+        switch (this->type) {
+            case Type::I32:
+                this->value.emplace<i32>(
+                    this->get_i32().unwrap() % v.get_i32().unwrap()
+                );
+                break;
+            case Type::F64:
+                this->value.emplace<f64>(
+                    fmod(this->get_f64().unwrap(), v.get_f64().unwrap())
                 );
                 break;
             default: break;
@@ -472,6 +530,10 @@ public:
         return result;
     }
 
+
+    List<Value>& get_list_ref() {
+        return any_cast<List<Value>&>(this->value);
+    }
 
     Option<List<Value>> get_list() {
         Option<List<Value>> result;

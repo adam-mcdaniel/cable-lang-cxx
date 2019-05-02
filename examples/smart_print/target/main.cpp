@@ -20,11 +20,11 @@ const Fn println_fn = Fn([](Value printed_objects) {
 int main() {
     auto print = Value(print_fn);
     auto println = Value(println_fn);
-
+;
 Value prints = Value(io_smart_print);
-Value String = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value s = CABLELANG__PARAMS[Value(0)]; Value self = Value();	*self.get_member("data") = s;	*self.get_member("__str__") = Value(Fn([&] (Value CABLELANG__PARAMS) {
-Value self = CABLELANG__PARAMS[Value(0)]; return Value(L({self, *self.get_member("data")}));}));	return self;}));
+Value String = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
+Value s = __CABLELANG__PARAMS__[Value(0)]; Value self = Value();	*self.get_member("data") = s;	*self.get_member("__str__") = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
+Value self = __CABLELANG__PARAMS__[Value(0)]; return Value(L({self, *self.get_member("data")}));}));	return self;}));
 prints(Value(L({String(Value(L({Value("5")})))})));
 
 return 0;

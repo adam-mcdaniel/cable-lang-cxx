@@ -10,6 +10,6 @@ let range = |l, u| {
 };
 
 
-for x in range(0, 1000) {
+for x in range(0, 100000) {
     println(x);
 }

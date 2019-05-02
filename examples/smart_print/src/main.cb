@@ -1,4 +1,4 @@
-include "io/io.cpp"
+include "io/io.cpp";
 let prints = io_smart_print&;
 
 
