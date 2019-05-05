@@ -23,6 +23,7 @@ Value range = Value(Fn([=] (Value __CABLELANG__PARAMS__) mutable {
 Value l = __CABLELANG__PARAMS__[Value(0)]; Value u = __CABLELANG__PARAMS__[Value(1)]; Value result = Value(Value(L({})));	Value n = l;	while ((n < u).to_bool()) {n+=Value(1);
 result+=Value(Value(L({n})));};	return result;}));
 for (Value x : range(Value(L({Value(0), Value(100000)}))).get_list().unwrap().as_vector()) {println(Value(L({x})));};
+if ((! Value(1)).to_bool()) {println(Value(L({Value("uh oh.")})));};
 
 return 0;
 }

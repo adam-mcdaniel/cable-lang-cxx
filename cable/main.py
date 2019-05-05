@@ -13,6 +13,7 @@ __improvements__ = [
     "v0.2.2 - Added +=, -=, *=, /= operators",
     "v0.2.3 - Added support for compiling in arbitrary locations",
     "v0.3.0 - Added support for if statements",
+    "v0.3.1 - Added support for getting types as strings"
 ]
 
 
