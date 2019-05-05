@@ -24,7 +24,15 @@ def copy_std_to_dir(path):
         copy(name, path + "/" + basename(name))
 
 
-def build(dir):
+def build_debug(dir):
+    system(
+        "g++ {dir}/main.cpp -std=c++17 -o {dir}/bin".format(
+            dir=dir
+        )
+    )
+
+
+def build_release(dir):
     system(
         "g++ {dir}/main.cpp -O3 -std=c++17 -o {dir}/bin".format(
             dir=dir

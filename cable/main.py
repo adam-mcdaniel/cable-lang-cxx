@@ -4,7 +4,8 @@ from sys import argv as cmd_args
 from error import custom_error, custom_info
 from compiler import Compiler
 from constants import OUTPUT_DIR
-from fileio import copy_std_to_dir, build
+from fileio import copy_std_to_dir, build_debug, build_release
+
 
 __version__ = "0.3.0"
 __author__ = "Adam McDaniel"
@@ -13,7 +14,8 @@ __improvements__ = [
     "v0.2.2 - Added +=, -=, *=, /= operators",
     "v0.2.3 - Added support for compiling in arbitrary locations",
     "v0.3.0 - Added support for if statements",
-    "v0.3.1 - Added support for getting types as strings"
+    "v0.3.1 - Added support for getting types as strings",
+    "v0.3.2 - Added debug and release modes",
 ]
 
 
@@ -37,7 +39,7 @@ def info():
 @click.argument('input_file')
 @click.option('--output-dir', '-o', default=OUTPUT_DIR, help='The output directory of the compiled cablelang script.')
 def compile(input_file, output_dir):
-    "Compile a cablelang script"
+    "Compile a cablelang script in debug mode"
     try: mkdir(output_dir)
     except: pass
 
@@ -45,7 +47,22 @@ def compile(input_file, output_dir):
     c = Compiler(input_file, output_dir + '/main.cpp')
     c.compile()
     c.write()
-    build(output_dir)
+    build_debug(output_dir)
+
+
+@main.command()
+@click.argument('input_file')
+@click.option('--output-dir', '-o', default=OUTPUT_DIR, help='The output directory of the compiled cablelang script.')
+def release(input_file, output_dir):
+    "Compile a cablelang script in release mode"
+    try: mkdir(output_dir)
+    except: pass
+
+    copy_std_to_dir(output_dir)
+    c = Compiler(input_file, output_dir + '/main.cpp')
+    c.compile()
+    c.write()
+    build_release(output_dir)
 
 
 if __name__ == "__main__":

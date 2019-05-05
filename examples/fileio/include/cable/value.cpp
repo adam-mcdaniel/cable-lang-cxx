@@ -40,6 +40,18 @@ public:
     Map<string, shared_ptr<Value>> members;
     Type type;
 
+    Value get_type_str() {
+        switch (this->type) {
+            case ListType: return Value("List");
+            case FunctionType: return Value("Function");
+            case String: return Value("String");
+            case I32: return Value("I32");
+            case F64: return Value("F64");
+            case NoneType: return Value("NoneType");
+        }
+    }
+
+
     void push(Value v) {
         // auto list_option = this->get_list();
         // if (list_option) {
@@ -399,7 +411,8 @@ public:
                     this->get_f64().unwrap() + v.get_f64().unwrap()
                 );
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 

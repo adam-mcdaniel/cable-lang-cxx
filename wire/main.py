@@ -7,7 +7,8 @@ from error import custom_info
 __version__ = "0.1.4"
 __author__ = "Adam McDaniel"
 __improvements__ = [
-    "Added support for updating multiple projects at once"
+    "0.1.4 - Added support for updating multiple projects at once",
+    "0.1.5 - Added support for debug and release modes",
 ]
 
 
@@ -37,15 +38,24 @@ def new(project_name):
 
 @main.command()
 def build():
-    "Builds a cablelang project"
+    "Builds a cablelang project in debug mode"
     custom_info("Building...")
     system("./cable compile src/main.cb")
     custom_info("Build complete.")
     
 
+
+@main.command()
+def release():
+    "Builds a cablelang project in release mode"
+    custom_info("Building...")
+    system("./cable release src/main.cb")
+    custom_info("Build complete.")
+    
+
 @main.command()
 def run():
-    "Builds a cablelang project"
+    "Builds and runs cablelang project in debug mode"
     custom_info("Building...")
     system("./cable compile src/main.cb")
     custom_info("Build complete.")
