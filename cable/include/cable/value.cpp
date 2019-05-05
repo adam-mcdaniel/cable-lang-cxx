@@ -186,6 +186,9 @@ public:
 
     Value call_method(string name, Value v) {
         Value f = *this->get_member(name);
+        if ((f == Value()).to_bool()) {return Value();}
+
+
         Value val = f(Value(vector<Value>{*this}) + v);
         Option<List<Value>> result = val.get_list();
         if (result) {
