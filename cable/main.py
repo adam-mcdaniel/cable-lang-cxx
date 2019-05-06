@@ -29,7 +29,7 @@ def main():
 
 @main.command()
 def info():
-    "Displays info on cable compiler"
+    "Displays info on the cable compiler"
     custom_info('Cable compiler v{}'.format(__version__))
     for improvement in __improvements__:
         custom_info(improvement)

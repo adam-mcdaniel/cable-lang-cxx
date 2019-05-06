@@ -298,7 +298,19 @@ public:
     }
 
     Value operator [](Value v) {
-        Option<Value> result = this->get_list().unwrap().at(v.get_i32().unwrap());
+        Option<Value> result = Option::Some(Value());
+        switch (this->type) {
+            case Type::ListType:
+                result = this->get_list().unwrap().at(v.get_i32().unwrap());
+                break;
+
+            case Type::String:
+                result = this->get_string().unwrap()[v.get_i32().unwrap()];
+                break;
+
+            default:
+                break;
+        }
         return result.unwrap();
     }
 
