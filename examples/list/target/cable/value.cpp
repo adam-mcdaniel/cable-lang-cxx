@@ -301,14 +301,20 @@ public:
         Option<Value> result = Option::Some(Value());
         switch (this->type) {
             case Type::ListType:
+                cout << "Is list" << endl;
                 result = this->get_list().unwrap().at(v.get_i32().unwrap());
                 break;
 
             case Type::String:
-                result = this->get_string().unwrap()[v.get_i32().unwrap()];
+                cout << "IS STRING" << endl;
+                string s = this->get_string().unwrap();
+                char ch = [v.get_i32().unwrap()];
+                string r = "" + ch;
+                result = Value(r);
                 break;
 
             default:
+                cout << "DEFAULT" << endl;
                 break;
         }
         return result.unwrap();

@@ -301,7 +301,28 @@ public:
     }
 
     Value operator [](Value v) {
-        Option<Value> result = this->get_list().unwrap().at(v.get_i32().unwrap());
+        Option<Value> result = Option<Value>::Some(Value());
+
+        string s = this->get_string().unwrap();
+        int i = v.get_i32().unwrap();
+
+        switch (this->type) {
+            case Type::ListType:
+                result = this->get_list().unwrap().at(v.get_i32().unwrap());
+                break;
+
+            case Type::String:
+                if (i >= s.length()) { return Value(); }
+
+                result = Option<Value>::Some(
+                    Value(string(1, s[i]))
+                );
+
+                break;
+
+            default:
+                break;
+        }
         return result.unwrap();
     }
 
