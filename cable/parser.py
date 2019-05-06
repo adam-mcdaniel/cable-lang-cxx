@@ -168,7 +168,7 @@ class CableLangCXXTree(Transformer):
         name = values[0]
         vector = values[1]
         body = values[2:]
-        return "for (Value " + name + " : " + vector + ".get_list().unwrap().as_vector()) {" + '\n'.join(body) + "}" 
+        return "for (Value " + name + " : (" + vector + ").get_list().unwrap().as_vector()) {" + '\n'.join(body) + "}" 
 
     def literal(self, values):
         return "Value({})".format(values[0])
