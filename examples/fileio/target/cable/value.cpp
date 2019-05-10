@@ -36,8 +36,8 @@ string num_to_string(T t) {
 
 class Value {
 public:
-    any value;
-    Map<string, shared_ptr<Value>> members;
+    shared_ptr<any> value = shared_ptr<any>(new any);
+    shared_ptr<Map<string, shared_ptr<Value>>> members = shared_ptr<Map<string, shared_ptr<Value>>>(new Map<string, shared_ptr<Value>>());
     Type type;
 
     Value get_type_str() {
@@ -109,32 +109,32 @@ public:
     }
     
     void set_value(i32 value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::I32;
     }
 
     void set_value(f64 value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::F64;
     }
 
     void set_value(string value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::String;
     }
 
     void set_value(vector<Value> value) {
-        this->value = List(value);
+        *this->value = List(value);
         this->type = Type::ListType;
     }
 
     void set_value(List<Value> value) {
-        this->value.emplace<List<Value>>(value);
+        (*this->value).emplace<List<Value>>(value);
         this->type = Type::ListType;
     }
 
     void set_value(Function<Value, Value> f) {
-        this->value = f;
+        *this->value = f;
         this->type = Type::FunctionType;
     }
 
@@ -143,49 +143,52 @@ public:
     }
 
     Value(i32 value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::I32;
     }
 
     Value(f64 value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::F64;
     }
 
     Value(string value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::String;
     }
 
     Value(vector<Value> value) {
-        this->value = List(value);
+        *this->value = List(value);
         this->type = Type::ListType;
     }
 
     Value(List<Value> value) {
-        this->value = value;
+        *this->value = value;
         this->type = Type::ListType;
     }
 
     Value(Function<Value, Value> f) {
-        this->value = f;
+        *this->value = f;
         this->type = Type::FunctionType;
     }
 
     shared_ptr<Value> get_member(string name) {
-        auto result = this->members.get(name);
+        auto result = this->members->get(name);
         if (!result) {
-            this->members.set(
+            this->members->set(
                 name,
                 shared_ptr<Value>(new Value())
             );
-            result = this->members.get(name);
+            result = this->members->get(name);
         }
         return result.unwrap();
     }
 
     Value call_method(string name, Value v) {
         Value f = *this->get_member(name);
+        if ((f == Value()).to_bool()) {return Value();}
+
+
         Value val = f(Value(vector<Value>{*this}) + v);
         Option<List<Value>> result = val.get_list();
         if (result) {
@@ -236,11 +239,11 @@ public:
     }
 
     Value operator !=(Value v) {
-        return Value(this->type != v.type || this->to_string() != v.to_string() || this->members != v.members);
+        return Value(this->type != v.type || this->to_string() != v.to_string() || *this->members != *v.members);
     }
 
     Value operator ==(Value v) {
-        return Value(this->type == v.type && this->to_string() == v.to_string() && this->members == v.members);
+        return Value(this->type == v.type && this->to_string() == v.to_string() && *this->members == *v.members);
     }
 
     Value operator <(Value v) {
@@ -298,7 +301,28 @@ public:
     }
 
     Value operator [](Value v) {
-        Option<Value> result = this->get_list().unwrap().at(v.get_i32().unwrap());
+        Option<Value> result = Option<Value>::Some(Value());
+
+        string s = this->get_string().unwrap();
+        int i = v.get_i32().unwrap();
+
+        switch (this->type) {
+            case Type::ListType:
+                result = this->get_list().unwrap().at(v.get_i32().unwrap());
+                break;
+
+            case Type::String:
+                if (i >= s.length()) { return Value(); }
+
+                result = Option<Value>::Some(
+                    Value(string(1, s[i]))
+                );
+
+                break;
+
+            default:
+                break;
+        }
         return result.unwrap();
     }
 
@@ -397,17 +421,17 @@ public:
                 }
                 break;
             case Type::String:
-                this->value.emplace<string>(
+                (*this->value).emplace<string>(
                     this->get_string().unwrap() + v.get_string().unwrap()
                 );
                 break;
             case Type::I32:
-                this->value.emplace<i32>(
+                (*this->value).emplace<i32>(
                     this->get_i32().unwrap() + v.get_i32().unwrap()
                 );
                 break;
             case Type::F64:
-                this->value.emplace<f64>(
+                (*this->value).emplace<f64>(
                     this->get_f64().unwrap() + v.get_f64().unwrap()
                 );
                 break;
@@ -419,12 +443,12 @@ public:
     void operator -=(Value v) {
         switch (this->type) {
             case Type::I32:
-                this->value.emplace<i32>(
+                (*this->value).emplace<i32>(
                     this->get_i32().unwrap() - v.get_i32().unwrap()
                 );
                 break;
             case Type::F64:
-                this->value.emplace<f64>(
+                (*this->value).emplace<f64>(
                     this->get_f64().unwrap() - v.get_f64().unwrap()
                 );
                 break;
@@ -435,12 +459,12 @@ public:
     void operator *=(Value v) {
         switch (this->type) {
             case Type::I32:
-                this->value.emplace<i32>(
+                (*this->value).emplace<i32>(
                     this->get_i32().unwrap() * v.get_i32().unwrap()
                 );
                 break;
             case Type::F64:
-                this->value.emplace<f64>(
+                (*this->value).emplace<f64>(
                     this->get_f64().unwrap() * v.get_f64().unwrap()
                 );
                 break;
@@ -451,12 +475,12 @@ public:
     void operator /=(Value v) {
         switch (this->type) {
             case Type::I32:
-                this->value.emplace<i32>(
+                (*this->value).emplace<i32>(
                     this->get_i32().unwrap() / v.get_i32().unwrap()
                 );
                 break;
             case Type::F64:
-                this->value.emplace<f64>(
+                (*this->value).emplace<f64>(
                     this->get_f64().unwrap() / v.get_f64().unwrap()
                 );
                 break;
@@ -467,12 +491,12 @@ public:
     void operator %=(Value v) {
         switch (this->type) {
             case Type::I32:
-                this->value.emplace<i32>(
+                (*this->value).emplace<i32>(
                     this->get_i32().unwrap() % v.get_i32().unwrap()
                 );
                 break;
             case Type::F64:
-                this->value.emplace<f64>(
+                (*this->value).emplace<f64>(
                     fmod(this->get_f64().unwrap(), v.get_f64().unwrap())
                 );
                 break;
@@ -520,7 +544,7 @@ public:
         Option<Function<Value, Value>> result;
         try {
             result = Option<Function<Value, Value>>::Some(
-                any_cast<Function<Value, Value>>(this->value)
+                any_cast<Function<Value, Value>>(*this->value)
             );
         }
         catch (const bad_any_cast& e) {
@@ -534,7 +558,7 @@ public:
         Option<string> result;
         try {
             result = Option<string>::Some(
-                any_cast<string>(this->value)
+                any_cast<string>(*this->value)
             );
         }
         catch (const bad_any_cast& e) {
@@ -545,14 +569,14 @@ public:
 
 
     List<Value>& get_list_ref() {
-        return any_cast<List<Value>&>(this->value);
+        return any_cast<List<Value>&>(*this->value);
     }
 
     Option<List<Value>> get_list() {
         Option<List<Value>> result;
         try {
             result = Option<List<Value>>::Some(
-                any_cast<List<Value>>(this->value)
+                any_cast<List<Value>>(*this->value)
             );
         }
         catch (const bad_any_cast& e) {
@@ -565,7 +589,7 @@ public:
         Option<i32> result;
         try {
             result = Option<i32>::Some(
-                any_cast<i32>(this->value)
+                any_cast<i32>(*this->value)
             );
         }
         catch (const bad_any_cast& e) {
@@ -578,7 +602,7 @@ public:
         Option<f64> result;
         try {
             result = Option<f64>::Some(
-                any_cast<f64>(this->value)
+                any_cast<f64>(*this->value)
             );
         }
         catch (const bad_any_cast& e) {
