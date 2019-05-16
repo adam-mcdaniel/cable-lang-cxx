@@ -11,7 +11,7 @@ curl -sSf https://raw.githubusercontent.com/adam-mcdaniel/cable-lang-cxx/master/
 
 ## Requirements
 
-- A working version of G++ that supports the C++17 standard.
+- A working version of clang++ (for some reason, this is not compatible with g++) that supports the C++17 standard.
 - make
 - Python3
     - pyinstaller
